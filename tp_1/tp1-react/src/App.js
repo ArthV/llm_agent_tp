@@ -13,9 +13,20 @@ function App() {
     console.log("Poule position: ", poulePos);
     console.log("Renard position: ", renardPos);
     axios.get('http://localhost:8080/gpt/').then(res => {
-      console.log(res.data);
-    });
-  }, [row, col, poulePos, renardPos]) 
+    res.data.message.forEach((functCall)=> {
+      const [i_poule, j_poule] = poulePos;
+      switch (functCall.name) {
+          case "en_avant":
+            setPoulePos([i_poule, j_poule + 1])
+            break;
+          case "en_arriere":
+            setPoulePos([i_poule, j_poule - 1 ])
+            break
+          default:
+            console.log("wrong name")
+      }
+    })});
+  }, [row, col, poulePos, renardPos, setPoulePos]) 
 
   return (
     <div className="App">
